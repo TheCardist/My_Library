@@ -1,0 +1,3 @@
+pandas==1.5.3
+polars==0.16.10
+streamlit==1.14.0
