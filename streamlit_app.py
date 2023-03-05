@@ -96,7 +96,7 @@ def filter_dataframe(df: pd.DataFrame) -> pd.DataFrame:
 
 def create_df() -> pl.DataFrame:
     read_df = (pl.read_csv(
-        r"C:\Users\Chris\Desktop\book_stats.csv", ignore_errors=True, columns=['Title', 'Authors', 'Read Status', 'Last Date Read', 'Read Count', 'Star Rating', 'Tags'], encoding="utf8")
+        "./book_stats.csv", ignore_errors=True, columns=['Title', 'Authors', 'Read Status', 'Last Date Read', 'Read Count', 'Star Rating', 'Tags'], encoding="utf8")
         .filter(pl.col('Read Status') == 'read')
         .with_columns(pl.col('Star Rating').cast(pl.Float64, strict=False))
         .rename({'Authors': 'Author'})
