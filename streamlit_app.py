@@ -10,11 +10,6 @@ from pandas.api.types import (
 )
 st.set_page_config(layout="wide")
 st.title("Books I've Read")
-st.write(
-    """
-    """
-)
-
 
 def filter_dataframe(df: pd.DataFrame) -> pd.DataFrame:
     """
