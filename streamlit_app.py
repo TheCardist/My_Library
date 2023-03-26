@@ -41,7 +41,7 @@ selected = option_menu(
             "background-color": "#333333",
             "height": "30px",
             "width": "13rem",
-            "color": "#7970a9",
+            "color": "#fff",
             "border-radius": "5px"
         },
         "nav-link-selected": {
