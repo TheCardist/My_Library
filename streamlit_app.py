@@ -53,8 +53,6 @@ selected = option_menu(
     }
 )
 
-st.title("Books I've Read")
-
 
 def filter_dataframe(df: pd.DataFrame) -> pd.DataFrame:
     """
@@ -143,7 +141,10 @@ def create_df() -> pl.DataFrame:
 
 def books_read():
     df = create_df()
-    st.dataframe(filter_dataframe(df), height=800, use_container_width=True)
+    with st.container():
+        st.title("Books I've Read")
+        st.dataframe(filter_dataframe(df), height=800,
+                     use_container_width=True)
 
 
 def book_stats():
