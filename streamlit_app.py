@@ -208,6 +208,18 @@ def book_stats():
         st.plotly_chart(fig, use_container_width=True)
         st.plotly_chart(fig2, use_container_width=True)
 
+    with st.container():
+        chart_data = (
+            pd.to_datetime(df['last date read'])
+            .dt.year
+            .value_counts()
+            .rename("amount")
+            .sort_index()
+            #   .plot.bar()
+        )
+        st.write('Books read by month')
+        st.bar_chart(chart_data)
+
 
 if selected == "Books Read":
     books_read()
