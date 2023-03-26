@@ -11,6 +11,7 @@ from pandas.api.types import (
 st.set_page_config(layout="wide")
 st.title("Books I've Read")
 
+
 def filter_dataframe(df: pd.DataFrame) -> pd.DataFrame:
     """
     Adds a UI on top of a dataframe to let viewers filter columns
@@ -27,17 +28,6 @@ def filter_dataframe(df: pd.DataFrame) -> pd.DataFrame:
         return df.style.format({"star rating": "{:.2f}"})
 
     df = df.copy()
-
-    # Try to convert datetimes into a standard format (datetime, no timezone)
-    # for col in df.columns:
-    #     if is_object_dtype(df[col]):
-    #         try:
-    #             df[col] = pd.to_datetime(df[col])
-    #         except Exception:
-    #             pass
-
-    # if is_datetime64_any_dtype(df[col]):
-    #     df[col] = df[col].dt.tz_localize(None)
 
     modification_container = st.container()
 
