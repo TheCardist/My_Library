@@ -182,7 +182,7 @@ def book_stats():
         x='Dates',
         y='Pages',
         years_title=True,
-        colorscale="fall",
+        colorscale="blues",
         gap=5,
         title="Daily Pages Read",
         total_height=250,
