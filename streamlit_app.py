@@ -208,7 +208,6 @@ def book_stats():
         st.plotly_chart(fig, use_container_width=True)
         st.plotly_chart(fig2, use_container_width=True)
     with st.container():
-        st.plotly_chart(fig, use_container_width=True)
 
         chart_data = (
             pd.to_datetime(df['last date read'])
