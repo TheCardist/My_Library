@@ -1,14 +1,59 @@
 import pandas as pd
 import polars as pl
+from streamlit_option_menu import option_menu
 import streamlit as st
-import streamlit.components.v1 as components
 from pandas.api.types import (
     is_categorical_dtype,
     is_datetime64_any_dtype,
     is_numeric_dtype,
-    is_object_dtype,
 )
+from plotly_calplot import calplot, month_calplot
+import gspread
+from oauth2client.service_account import ServiceAccountCredentials
+import json
+
 st.set_page_config(layout="wide")
+
+
+def local_css(file_name):
+    with open(file_name) as f:
+        st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
+
+
+local_css("stylesheet.css")
+
+selected = option_menu(
+    menu_title=None,
+    options=["Books Read", "Stats"],
+    icons=["code", "braces", "bricks"],
+    menu_icon="cast",
+    default_index=0,
+    orientation="horizontal",
+    styles={
+        "container": {"padding": "0px",
+                      "width": "40rem",
+                      "background-color": "#0e1117"
+                      },
+        "icon": {"color": "#8bff80", "font-size": "14px"},
+        "nav-link": {
+            "font-size": "14px",
+            "text-align": "center",
+            "margin": "auto",
+            "background-color": "#333333",
+            "height": "30px",
+            "width": "13rem",
+            "color": "#7970a9",
+            "border-radius": "5px"
+        },
+        "nav-link-selected": {
+            "background-color": "#454158",
+            "font-weight": "300",
+            "color": "#f7f8f2",
+            "border": "1px solid #fe80bf"
+        }
+    }
+)
+
 st.title("Books I've Read")
 
 
@@ -94,5 +139,77 @@ def create_df() -> pl.DataFrame:
     return read_df
 
 
-df = create_df()
-st.dataframe(filter_dataframe(df), height=800, use_container_width=True)
+def books_read():
+    df = create_df()
+    st.dataframe(filter_dataframe(df), height=800, use_container_width=True)
+
+
+def book_stats():
+    URL = st.secrets['URL']
+    creds = {"type": st.secrets.json.type,
+             "project_id": st.secrets.json.project_id,
+             "private_key_id": st.secrets.json.private_key_id,
+             "private_key": st.secrets.json.private_key,
+             "client_email": st.secrets.json.client_email,
+             "client_id": st.secrets.json.client_id,
+             "auth_uri": st.secrets.json.auth_uri,
+             "token_uri": st.secrets.json.token_uri,
+             "auth_provider_x509_cert_url": st.secrets.json.auth_provider,
+             "client_x509_cert_url": st.secrets.json.client}
+
+    JKEY = json.dumps(creds, indent=4)
+
+    # Set up API credentials and open the worksheet
+    scope = ['https://spreadsheets.google.com/feeds',
+             'https://www.googleapis.com/auth/drive']
+    credentials = ServiceAccountCredentials.from_json_keyfile_dict(
+        creds, scope)
+    gc = gspread.authorize(credentials)
+    workbook = gc.open_by_url(URL)
+    worksheet = workbook.worksheet('Sheet1')
+
+    data = worksheet.get_all_values()
+    headers = data.pop(0)
+
+    df = pd.DataFrame(data, columns=headers)
+
+    df['Dates'] = pd.to_datetime(df.Dates)
+    df['Pages'] = pd.to_numeric(df.Pages)
+    # df['Dates'] = df['Dates'].dt.strftime('%Y-%m-%d')
+
+    fig = calplot(
+        df,
+        x='Dates',
+        y='Pages',
+        years_title=True,
+        colorscale="fall",
+        gap=5,
+        title="Daily Pages Read",
+        total_height=250,
+        showscale=True,
+        month_lines_width=1,
+        dark_theme=True,
+    )
+
+    fig.update_layout(paper_bgcolor="#0e1117")
+
+    fig2 = month_calplot(
+        df,
+        x='Dates',
+        y='Pages',
+        colorscale="purples",
+        showscale=True,
+        total_height=250,
+        title="Total Pages per Month",
+        dark_theme=True)
+
+    fig2.update_layout(paper_bgcolor="#0e1117")
+    with st.container():
+        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig2, use_container_width=True)
+
+
+if selected == "Books Read":
+    books_read()
+else:
+    book_stats()
