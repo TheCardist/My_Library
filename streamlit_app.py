@@ -189,7 +189,6 @@ def book_stats():
         showscale=True,
         month_lines_width=1,
         dark_theme=True,
-        text="Test data"
     )
 
     fig.update_layout(paper_bgcolor="#0e1117")
