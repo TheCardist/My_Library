@@ -48,7 +48,7 @@ selected = option_menu(
             "background-color": "#454158",
             "font-weight": "300",
             "color": "#f7f8f2",
-            "border": "1px solid #fe80bf"
+            "border": "1px solid #c42b1c"
         }
     }
 )
