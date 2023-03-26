@@ -10,7 +10,6 @@ from pandas.api.types import (
 from plotly_calplot import calplot, month_calplot
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
-import json
 
 st.set_page_config(layout="wide")
 
@@ -135,7 +134,10 @@ def create_df() -> pl.DataFrame:
 
     read_df = read_df.to_pandas()
     read_df.columns = read_df.columns.str.lower()
-
+    read_df = read_df.sort_values(
+        by="last date read", ignore_index=True)
+    read_df.index = read_df.index + 1
+    read_df.index.name = "order"
     return read_df
 
 
@@ -146,24 +148,22 @@ def books_read():
 
 def book_stats():
     URL = st.secrets['URL']
-    creds = {"type": st.secrets.json.type,
-             "project_id": st.secrets.json.project_id,
-             "private_key_id": st.secrets.json.private_key_id,
-             "private_key": st.secrets.json.private_key,
-             "client_email": st.secrets.json.client_email,
-             "client_id": st.secrets.json.client_id,
-             "auth_uri": st.secrets.json.auth_uri,
-             "token_uri": st.secrets.json.token_uri,
-             "auth_provider_x509_cert_url": st.secrets.json.auth_provider,
-             "client_x509_cert_url": st.secrets.json.client}
-
-    JKEY = json.dumps(creds, indent=4)
+    JSON_KEY = {"type": st.secrets.json.type,
+                "project_id": st.secrets.json.project_id,
+                "private_key_id": st.secrets.json.private_key_id,
+                "private_key": st.secrets.json.private_key,
+                "client_email": st.secrets.json.client_email,
+                "client_id": st.secrets.json.client_id,
+                "auth_uri": st.secrets.json.auth_uri,
+                "token_uri": st.secrets.json.token_uri,
+                "auth_provider_x509_cert_url": st.secrets.json.auth_provider,
+                "client_x509_cert_url": st.secrets.json.client}
 
     # Set up API credentials and open the worksheet
     scope = ['https://spreadsheets.google.com/feeds',
              'https://www.googleapis.com/auth/drive']
     credentials = ServiceAccountCredentials.from_json_keyfile_dict(
-        creds, scope)
+        JSON_KEY, scope)
     gc = gspread.authorize(credentials)
     workbook = gc.open_by_url(URL)
     worksheet = workbook.worksheet('Sheet1')
@@ -197,7 +197,7 @@ def book_stats():
         df,
         x='Dates',
         y='Pages',
-        colorscale="purples",
+        colorscale="Purpor",
         showscale=True,
         total_height=250,
         title="Total Pages per Month",
