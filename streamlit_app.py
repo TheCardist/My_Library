@@ -206,8 +206,8 @@ def book_stats():
     fig2.update_layout(paper_bgcolor="#0e1117")
     with st.container():
         st.plotly_chart(fig, use_container_width=True)
+    with st.container():
         st.plotly_chart(fig2, use_container_width=True)
-
     with st.container():
         df = create_df()
         chart_data = (
