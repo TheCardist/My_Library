@@ -178,37 +178,33 @@ def book_stats():
     df['Pages'] = pd.to_numeric(df.Pages)
     # df['Dates'] = df['Dates'].dt.strftime('%Y-%m-%d')
 
-    fig = calplot(
-        df,
-        x='Dates',
-        y='Pages',
-        years_title=True,
-        colorscale="Purpor",
-        gap=5,
-        title="Daily Pages Read",
-        total_height=250,
-        showscale=True,
-        month_lines_width=1,
-        dark_theme=True,
-    )
+    df2 = create_df()
+    df2 = df2[['last date read', 'read count']]
+    df2['last date read'] = pd.to_datetime(
+        df2['last date read'], errors='coerce')
+    df2.reset_index()
 
-    fig.update_layout(paper_bgcolor="#0e1117")
-
-    fig2 = month_calplot(
-        df,
-        x='Dates',
-        y='Pages',
+    fig3 = month_calplot(
+        df2,
+        x='last date read',
+        y='read count',
         colorscale="Purpor",
         showscale=True,
         total_height=250,
-        title="Total Pages per Month",
+        title="Books Read per Month",
         dark_theme=True)
 
-    fig2.update_layout(paper_bgcolor="#0e1117")
+    fig.update_layout(paper_bgcolor="#0e1117", font_size=14,
+                      margin=dict(t=90))
+    fig2.update_layout(paper_bgcolor="#0e1117",
+                       font_size=14, margin=dict(t=90))
+    fig3.update_layout(paper_bgcolor="#0e1117",
+                       font_size=14, margin=dict(t=90))
     with st.container():
         st.title("Book Stats")
         st.plotly_chart(fig, use_container_width=True)
         st.plotly_chart(fig2, use_container_width=True)
+        st.plotly_chart(fig3, use_container_width=True)
 
         df = create_df()
         chart_data = (
