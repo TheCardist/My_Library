@@ -178,6 +178,30 @@ def book_stats():
     df['Pages'] = pd.to_numeric(df.Pages)
     # df['Dates'] = df['Dates'].dt.strftime('%Y-%m-%d')
 
+    fig = calplot(
+        df,
+        x='Dates',
+        y='Pages',
+        years_title=True,
+        colorscale="Purpor",
+        gap=5,
+        title="Daily Pages Read",
+        total_height=250,
+        showscale=True,
+        month_lines_width=1,
+        dark_theme=True,
+    )
+
+    fig2 = month_calplot(
+        df,
+        x='Dates',
+        y='Pages',
+        colorscale="Purpor",
+        showscale=True,
+        total_height=250,
+        title="Total Pages per Month",
+        dark_theme=True)
+    
     df2 = create_df()
     df2 = df2[['last date read', 'read count']]
     df2['last date read'] = pd.to_datetime(
