@@ -219,7 +219,7 @@ def book_stats():
         dark_theme=True)
 
     fig.update_layout(paper_bgcolor="#0e1117", font_size=14,
-                      margin=dict(t=90))
+                      margin=dict(t=90), hovermode='y')
     fig2.update_layout(paper_bgcolor="#0e1117",
                        font_size=14, margin=dict(t=90))
     fig3.update_layout(paper_bgcolor="#0e1117",
