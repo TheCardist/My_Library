@@ -219,7 +219,7 @@ def book_stats():
         dark_theme=True)
 
     fig.update_traces(
-    hovertemplate="Pages: %{y}")
+    hovertemplate="Pages Read: #{y}")
     fig.update_layout(paper_bgcolor="#0e1117", font_size=14,
                       margin=dict(t=90))
     fig2.update_layout(paper_bgcolor="#0e1117",
