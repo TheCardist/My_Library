@@ -218,6 +218,8 @@ def book_stats():
         title="Books Read per Month",
         dark_theme=True)
 
+    fig.update_traces(
+    hovertemplate="Value: %{z}<br>Date: %{x|%A, %B %d, %Y}")
     fig.update_layout(paper_bgcolor="#0e1117", font_size=14,
                       margin=dict(t=90))
     fig2.update_layout(paper_bgcolor="#0e1117",
