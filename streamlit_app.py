@@ -190,7 +190,7 @@ def book_stats():
         showscale=True,
         month_lines_width=1,
         dark_theme=True,
-        hoverinfo="Pages"
+        text="Pages"
     )
 
     fig2 = month_calplot(
