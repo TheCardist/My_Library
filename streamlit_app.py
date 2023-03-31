@@ -189,7 +189,7 @@ def book_stats():
         total_height=250,
         showscale=True,
         month_lines_width=1,
-        yaxis_title='Pages Read'
+        yaxis_title='Pages Read',
         dark_theme=True,
     )
 
