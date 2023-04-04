@@ -11,16 +11,18 @@ from plotly_calplot import calplot, month_calplot
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 
-st.set_page_config(layout="wide")
+st.set_page_config(layout="wide") # Configuration of streamlit page
 
 
-def local_css(file_name):
+def local_css(file_name): 
+    """Loading external css stylesheet to make modifications to the aesthetic of the webapp."""
     with open(file_name) as f:
         st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
 
 
-local_css("stylesheet.css")
+local_css("stylesheet.css") # Load stylesheet.css
 
+# Setup navigation menu
 selected = option_menu(
     menu_title=None,
     options=["Books Read", "Stats"],
@@ -122,6 +124,7 @@ def filter_dataframe(df: pd.DataFrame) -> pd.DataFrame:
 
 
 def create_df() -> pl.DataFrame:
+    """Create the original Polars DataFrame from the book_stats.csv file and return a Pandas DataFrame."""
     read_df = (pl.read_csv(
         "./book_stats.csv", ignore_errors=True, columns=['Title', 'Authors', 'Read Status', 'Last Date Read', 'Read Count', 'Star Rating', 'Tags'], encoding="utf8")
         .filter(pl.col('Read Status') == 'read')
@@ -140,6 +143,7 @@ def create_df() -> pl.DataFrame:
 
 
 def books_read():
+    """Trigger create_df to create DataFrame to show in the main page with st.dataframe"""
     df = create_df()
     with st.container():
         st.title("Books I've Read")
@@ -148,6 +152,7 @@ def books_read():
 
 
 def book_stats():
+    """Login to Google Sheets to get stats on dates/pages read and add to a Pandas DataFrame to consume for Calplot."""
     URL = st.secrets['URL']
     JSON_KEY = {"type": st.secrets.json.type,
                 "project_id": st.secrets.json.project_id,
