@@ -136,7 +136,8 @@ def create_df() -> pl.DataFrame:
     read_df = read_df.to_pandas()
     read_df.columns = read_df.columns.str.lower()
     read_df = read_df.sort_values(
-        by="last date read", ascending=[False])
+        by="last date read", ignore_index=True)
+    read_df = read_df.sort_values('last date read', ascending=[False])
     read_df.index = read_df.index + 1
     read_df.index.name = "order"
     return read_df
