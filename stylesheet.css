@@ -1,8 +1,9 @@
 .menu {
-  background-color: #242424 !important
+  --background-color: #242424 !important;
+  background-color: var(--background-color);
 }
 
-[class^="stApp"] {
+[class^="stApp"]>header {
   background-color: #242424 !important;
 }
 
@@ -11,5 +12,9 @@
 }
 
 [class^="appview-container"] {
+  background-color: #242424 !important;
+}
+
+[class^="element-container"] {
   background-color: #242424 !important;
 }
