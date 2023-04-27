@@ -2,6 +2,10 @@
   color: #0e1117;
 }
 
+.menu {
+  background-color: #242424 !important
+}
+
 [class^="stApp"] {
   background-color: #242424 !important;
 }
