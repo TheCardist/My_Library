@@ -33,7 +33,7 @@ selected = option_menu(
     styles={
         "container": {"padding": "0px",
                       "width": "40rem",
-                      "background-color": "#0e1117"
+                      "background-color": "#242424"
                       },
         "icon": {"color": "#8bff80", "font-size": "14px"},
         "nav-link": {
@@ -189,12 +189,14 @@ def book_stats():
         x='Dates',
         y='Pages',
         years_title=True,
-        colorscale="Purpor",
+        colorscale=[(0.00, "#333"), (0.33, "#a126ef"),
+                    (0.33, "#a126ef"), (0.66, "#f1defc"),
+                    (0.66, "#f1defc"), (1.00, "white")],
         gap=5,
         title="Daily Pages Read",
         total_height=250,
         showscale=True,
-        month_lines_width=1,
+        month_lines_width=2,
         dark_theme=True,
         text="Pages"
     )
@@ -225,12 +227,12 @@ def book_stats():
         title="Books Read per Month",
         dark_theme=True)
 
-    fig.update_layout(paper_bgcolor="#0e1117", font_size=14,
-                      margin=dict(t=90))
-    fig2.update_layout(paper_bgcolor="#0e1117",
-                       font_size=14, margin=dict(t=90))
-    fig3.update_layout(paper_bgcolor="#0e1117",
-                       font_size=14, margin=dict(t=90))
+    fig.update_layout(paper_bgcolor="#242424", font_size=14,
+                      margin=dict(t=90), plot_bgcolor="#242424")
+    fig2.update_layout(paper_bgcolor="#242424",
+                       font_size=14, margin=dict(t=90), plot_bgcolor="#242424")
+    fig3.update_layout(paper_bgcolor="#242424",
+                       font_size=14, margin=dict(t=90), plot_bgcolor="#242424")
     with st.container():
         st.title("Book Stats")
         st.plotly_chart(fig, use_container_width=True)
