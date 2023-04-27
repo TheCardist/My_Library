@@ -1,3 +1,15 @@
 .block-container {
   color: #0e1117;
 }
+
+[class^="stApp"] {
+  background-color: #242424 !important;
+}
+
+[class^="plot-containter"] {
+  background-color: #242424 !important;
+}
+
+[class^="appview-container"] {
+  background-color: #242424 !important;
+}
