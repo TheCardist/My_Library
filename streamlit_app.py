@@ -189,7 +189,7 @@ def book_stats():
         x='Dates',
         y='Pages',
         years_title=True,
-        colorscale=[(0.00, "#333"), (0.33, "#a126ef"),
+        colorscale=[(0.00, "#242424"), (0.33, "#a126ef"),
                     (0.33, "#a126ef"), (0.66, "#f1defc"),
                     (0.66, "#f1defc"), (1.00, "white")],
         gap=5,
