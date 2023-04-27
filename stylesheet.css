@@ -1,4 +1,4 @@
-.menu {
+#app {
   --background-color: #242424 !important;
   background-color: var(--background-color);
 }
