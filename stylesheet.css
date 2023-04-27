@@ -1,6 +1,5 @@
 #app {
-  --background-color: #242424 !important;
-  background-color: var(--background-color);
+  background-color: #242424 !important;
 }
 
 [class^="stApp"]>header {
