@@ -1,19 +1,19 @@
 #app {
-  background-color: #242424 !important;
+  background-color: #0e1117 !important;
 }
 
 [class^="stApp"]>header {
-  background-color: #242424 !important;
+  background-color: #0e1117 !important;
 }
 
 [class^="plot-containter"] {
-  background-color: #242424 !important;
+  background-color: #0e1117 !important;
 }
 
 [class^="appview-container"] {
-  background-color: #242424 !important;
+  background-color: #0e1117 !important;
 }
 
 [class^="element-container"] {
-  background-color: #242424 !important;
+  background-color: #0e1117 !important;
 }
