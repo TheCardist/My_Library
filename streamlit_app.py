@@ -227,7 +227,7 @@ def book_stats():
         title="Books Read per Month",
         dark_theme=True)
 
-    fig.update_layout(paper_bgcolor="#242424", font_size=14,
+    fig.update_layout(paper_bgcolor="#0e1117", font_size=14,
                       margin=dict(t=90), plot_bgcolor="#0e1117")
     fig2.update_layout(paper_bgcolor="#0e1117",
                        font_size=14, margin=dict(t=90), plot_bgcolor="#0e1117")
