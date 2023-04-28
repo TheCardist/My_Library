@@ -33,7 +33,7 @@ selected = option_menu(
     styles={
         "container": {"padding": "0px",
                       "width": "40rem",
-                      "background-color": "#242424"
+                      "background-color": "#0e1117"
                       },
         "icon": {"color": "#8bff80", "font-size": "14px"},
         "nav-link": {
@@ -228,11 +228,11 @@ def book_stats():
         dark_theme=True)
 
     fig.update_layout(paper_bgcolor="#242424", font_size=14,
-                      margin=dict(t=90), plot_bgcolor="#242424")
-    fig2.update_layout(paper_bgcolor="#242424",
-                       font_size=14, margin=dict(t=90), plot_bgcolor="#242424")
-    fig3.update_layout(paper_bgcolor="#242424",
-                       font_size=14, margin=dict(t=90), plot_bgcolor="#242424")
+                      margin=dict(t=90), plot_bgcolor="#0e1117")
+    fig2.update_layout(paper_bgcolor="#0e1117",
+                       font_size=14, margin=dict(t=90), plot_bgcolor="#0e1117")
+    fig3.update_layout(paper_bgcolor="#0e1117",
+                       font_size=14, margin=dict(t=90), plot_bgcolor="#0e1117")
     with st.container():
         st.title("Book Stats")
         st.plotly_chart(fig, use_container_width=True)
