@@ -1,5 +1,6 @@
 import pandas as pd
 import polars as pl
+import plotly.graph_objs as go
 from streamlit_option_menu import option_menu
 import streamlit as st
 from pandas.api.types import (
@@ -124,7 +125,8 @@ def filter_dataframe(df: pd.DataFrame) -> pd.DataFrame:
 
 
 def create_df() -> pl.DataFrame:
-    """Create the original Polars DataFrame from the book_stats.csv file and return a Pandas DataFrame."""
+    """Create the original Polars DataFrame from the display_book_stats.csv file and return a Pandas DataFrame."""
+    
     read_df = (pl.read_csv(
         "./book_stats.csv", ignore_errors=True, columns=['Title', 'Authors', 'Read Status', 'Last Date Read', 'Read Count', 'Star Rating', 'Tags'], encoding="utf8")
         .filter(pl.col('Read Status') == 'read')
@@ -145,16 +147,18 @@ def create_df() -> pl.DataFrame:
 
 def books_read():
     """Trigger create_df to create DataFrame to show in the main page with st.dataframe"""
+    
     df = create_df()
     with st.container():
         st.title("Books I've Read")
         st.dataframe(filter_dataframe(df), height=800,
                      use_container_width=True)
 
-
-def book_stats():
+def get_pages_read() -> pd.DataFrame:
     """Login to Google Sheets to get stats on dates/pages read and add to a Pandas DataFrame to consume for Calplot."""
+    
     URL = st.secrets['URL']
+    
     JSON_KEY = {"type": st.secrets.json.type,
                 "project_id": st.secrets.json.project_id,
                 "private_key_id": st.secrets.json.private_key_id,
@@ -177,13 +181,15 @@ def book_stats():
 
     data = worksheet.get_all_values()
     headers = data.pop(0)
+    
+    return data, headers
 
+def create_charts(data: pd.DataFrame, headers: list):
     df = pd.DataFrame(data, columns=headers)
 
     df['Dates'] = pd.to_datetime(df.Dates)
     df['Pages'] = pd.to_numeric(df.Pages)
-    # df['Dates'] = df['Dates'].dt.strftime('%Y-%m-%d')
-
+    
     fig = calplot(
         df,
         x='Dates',
@@ -197,8 +203,16 @@ def book_stats():
         showscale=True,
         month_lines_width=2,
         dark_theme=True,
-        text="Pages"
     )
+    
+    fig.update_layout(paper_bgcolor="#0e1117", font_size=14,
+                      margin=dict(t=90), plot_bgcolor="#0e1117")
+    
+    fig.update_traces(
+    hovertemplate='<b>Date:</b> %{y} %{customdata[0]}<br>' + '<b>Pages Read:</b> %{z}<extra></extra>', 
+    hoverlabel=dict(
+        font=dict(color='white')
+    ))
 
     fig2 = month_calplot(
         df,
@@ -211,11 +225,14 @@ def book_stats():
         title="Total Pages per Month",
         dark_theme=True)
     
+    
+    
     df2 = create_df()
     df2 = df2[['last date read', 'read count']]
     df2['last date read'] = pd.to_datetime(
         df2['last date read'], errors='coerce')
     df2.reset_index()
+
 
     fig3 = month_calplot(
         df2,
@@ -228,32 +245,73 @@ def book_stats():
         title="Books Read per Month",
         dark_theme=True)
 
-    fig.update_layout(paper_bgcolor="#0e1117", font_size=14,
-                      margin=dict(t=90), plot_bgcolor="#0e1117")
+        
+    df3 = df2[['last date read']].copy().dropna()
+    
+    df3['Date'] = pd.to_datetime(df3['last date read'])
+    df3['Year'] = df3['Date'].dt.year.astype('Int64')
+    
+    yearly_counts = df3.groupby('Year').count().reset_index()
+
+    fig4 = go.Figure(data=[go.Bar(x=yearly_counts['Year'], y=yearly_counts['last date read'], marker=dict(color='#9E69F3'))])
+    
+
+    
     fig2.update_layout(paper_bgcolor="#0e1117",
                        font_size=14, margin=dict(t=90), plot_bgcolor="#0e1117")
+    
+    fig2.update_traces(
+    hovertemplate='<b>Pages Read:</b> %{z}<extra></extra>', 
+    hoverlabel=dict(
+        font=dict(color='white')
+    ))
+    
+    
     fig3.update_layout(paper_bgcolor="#0e1117",
                        font_size=14, margin=dict(t=90), plot_bgcolor="#0e1117")
+    
+    fig3.update_traces(
+    hovertemplate='<b>Books Read:</b> %{z}<extra></extra>', 
+    hoverlabel=dict(
+        font=dict(color='white')
+    ))
+    
+    fig4.update_layout(
+    plot_bgcolor='#0e1117',
+    paper_bgcolor='#0e1117',
+    title='Books Read by Year',
+    xaxis_title='Year',
+    yaxis_title='Number of Books Read',
+    font=dict(
+        color='white'
+    )
+)
+
+    fig4.update_xaxes(tickvals=yearly_counts['Year'])
+
+    fig4.update_traces(
+        hovertemplate='<b>Year:</b> %{x}<br>' + '<b>Number of Books Read:</b> %{y}<extra></extra>', 
+        marker_color='#9E69F3',
+        hoverlabel=dict(
+            font=dict(color='white')
+        )
+    )
+    
+    return fig, fig2, fig3, fig4
+
+def display_charts(fig, fig2, fig3, fig4):
     with st.container():
         st.title("Book Stats")
         st.plotly_chart(fig, use_container_width=True)
         st.plotly_chart(fig2, use_container_width=True)
         st.plotly_chart(fig3, use_container_width=True)
-
-        df = create_df()
-        chart_data = (
-            pd.to_datetime(df['last date read'])
-            .dt.year
-            .value_counts()
-            .rename("amount")
-            .sort_index()
-            #   .plot.bar()
-        )
         st.write('Books read by month')
-        st.bar_chart(chart_data)
+        st.plotly_chart(fig4, use_container_width=True)
 
 
 if selected == "Books Read":
     books_read()
 else:
-    book_stats()
+    data, header = get_pages_read()
+    fig, fig2, fig3, fig4 = create_charts(data, header)
+    display_charts(fig, fig2, fig3, fig4)
