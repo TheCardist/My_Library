@@ -34,7 +34,7 @@ selected = option_menu(
     styles={
         "container": {
             "padding": "0px",
-            "width": "40rem",
+            "width": "20rem",
             "background-color": "#0e1117",
         },
         "icon": {"color": "#8bff80", "font-size": "14px"},
@@ -44,7 +44,7 @@ selected = option_menu(
             "margin": "auto",
             "background-color": "#333333",
             "height": "30px",
-            "width": "13rem",
+            "width": "9rem",
             "color": "#fff",
             "border-radius": "5px",
         },
