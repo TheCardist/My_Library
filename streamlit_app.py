@@ -253,7 +253,7 @@ def create_charts(data: pd.DataFrame, headers: list):
         colorscale="thermal",
         showscale=True,
         total_height=250,
-        title="Books Read per Month",
+        title="Books Read by Month",
         dark_theme=True,
     )
 
@@ -319,7 +319,6 @@ def display_charts(fig, fig2, fig3, fig4):
         st.plotly_chart(fig, use_container_width=True)
         st.plotly_chart(fig2, use_container_width=True)
         st.plotly_chart(fig3, use_container_width=True)
-        st.write("Books read by month")
         st.plotly_chart(fig4, use_container_width=True)
 
 
