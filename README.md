@@ -3,3 +3,5 @@ I wanted to create a webapp that provided a list of all the books I've read alon
 
 ## Details
 Using Streamlit I created this webapp to display a table of all the books I've read which are in the book_stats.csv. This csv comes from StoryGraph which is the site I use to catalog what I read. In addition to this there is a stats page where I display various stats on my reading habits including how many pages I read daily which is pulled from a Google Sheets document that I keep updated.
+
+I use plotly for the charts, pandas and polars for the data manipulation, and gspread to get the data required from the Google Sheets document.
